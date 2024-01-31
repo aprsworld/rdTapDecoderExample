@@ -23,9 +23,9 @@ public class RecordDCSWCModuleVoltageCurrentCounter {
 	}
 
 	public void parseRecord(int[] buff) {
-//		for ( int i=0 ; i<buff.length ; i++ ) {
-//			System.out.printf("# buff[%d]=0x%02x\n", i,buff[i]);
-//		}
+		//for ( int i=0 ; i<buff.length ; i++ ) {
+		//	System.out.printf("# RecordDCSWCModuleVoltageCurrentCounter buff[%d]=0x%02x\n", i,buff[i]);
+		//}
 		
 		if ( buff.length < 20 )
 			return;
@@ -33,9 +33,13 @@ public class RecordDCSWCModuleVoltageCurrentCounter {
 		voltageBusA = (( (buff[0]<<24) + (buff[1]<<16) + (buff[2]<<8) + buff[3] )>>4)  * 0.0001953125;
 
 		int shuntA = (( (buff[4]<<24) + (buff[5]<<16) + (buff[6]<<8) + buff[7] )>>4);
+		
+		// shuntA = 566251; /* test value of -0.15072625 volts */ 
+
+		
 		/* get two's complement from device into right sign on this computer */
-		if ( shuntA >= 1048576 ) {
-			shuntA = 0 - shuntA;
+		if ( shuntA >= 524287 ) {
+			shuntA = 0 - (~shuntA & 0x7ffff);
 		}
 		voltageShuntA = shuntA * 312.5 * 0.000000001;
 		
@@ -44,11 +48,14 @@ public class RecordDCSWCModuleVoltageCurrentCounter {
 		voltageBusB = (( (buff[8]<<24) + (buff[9]<<16) + (buff[10]<<8) + buff[11] )>>4)  * 0.0001953125;
 		
 		int shuntB = (( (buff[12]<<24) + (buff[13]<<16) + (buff[14]<<8) + buff[15] )>>4);
+
+		// shuntB = 482557; /* test value of 0.15079906 volts */
+		
 		/* get two's complement from device into right sign on this computer */
-		if ( shuntB >= 1048576 ) {
-			shuntB = 0 - shuntB;
+		if ( shuntB >= 524287 ) {
+			shuntB = 0 - (~shuntB & 0x7ffff);
 		}
-		voltageShuntA = shuntB * 312.5 * 0.000000001;
+		voltageShuntB = shuntB * 312.5 * 0.000000001;
 		
 		
 		counterLastSecondA = ( (buff[16]<<8) + buff[17] );
