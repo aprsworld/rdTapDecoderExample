@@ -11,11 +11,13 @@ public class RecordDCSWCModuleVoltageCurrentCounter {
 	public int counterB;
 	public int counterSeconds;
 	protected boolean valid;
+	public int[] bRaw;
 	
 
 
 	public RecordDCSWCModuleVoltageCurrentCounter() {
 			valid=false;
+			bRaw = new int[32];
 	}
 
 	public boolean isValid() {
@@ -23,9 +25,10 @@ public class RecordDCSWCModuleVoltageCurrentCounter {
 	}
 
 	public void parseRecord(int[] buff) {
-		//for ( int i=0 ; i<buff.length ; i++ ) {
+		for ( int i=0 ; i<buff.length && i<bRaw.length ; i++ ) {
 		//	System.out.printf("# RecordDCSWCModuleVoltageCurrentCounter buff[%d]=0x%02x\n", i,buff[i]);
-		//}
+			bRaw[i]=buff[i];
+		}
 		
 		if ( buff.length < 20 )
 			return;
@@ -80,19 +83,28 @@ public class RecordDCSWCModuleVoltageCurrentCounter {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("# DCSWC Module Voltage Current Counter:\n");
-		sb.append(String.format("\t          Bus A Voltage: %.3f volts\n", voltageBusA));
-		sb.append(String.format("\t        Shunt A Voltage: %.8f volts\n", voltageShuntA));
-
-		sb.append(String.format("\t          Bus B Voltage: %.3f volts\n", voltageBusB));
-		sb.append(String.format("\t        Shunt B Voltage: %.8f volts\n", voltageShuntB));
+		sb.append(String.format("\t          Bus A Voltage: %.3f volts (0x %02x %02x %02x %02x)\n", voltageBusA,
+				bRaw[0],bRaw[1],bRaw[2],bRaw[3]));
+		sb.append(String.format("\t        Shunt A Voltage: %.8f volts (0x %02x %02x %02x %02x)\n", voltageShuntA,
+				bRaw[4],bRaw[5],bRaw[6],bRaw[7]));				
 		
-		sb.append(String.format("\tCounter A (last second): %d counts\n",counterLastSecondA));
-		sb.append(String.format("\tCounter B (last second): %d counts\n",counterLastSecondB));
+		sb.append(String.format("\t          Bus B Voltage: %.3f volts (0x %02x %02x %02x %02x)\n", voltageBusB,
+				bRaw[8],bRaw[9],bRaw[10],bRaw[11]));	
+		sb.append(String.format("\t        Shunt B Voltage: %.8f volts (0x %02x %02x %02x %02x)\n", voltageShuntB,
+				bRaw[12],bRaw[13],bRaw[14],bRaw[15]));	
 		
-		sb.append(String.format("\t              Counter A: %d counts\n",counterA));
-		sb.append(String.format("\t              Counter B: %d counts\n",counterB));
+		sb.append(String.format("\tCounter A (last second): %d counts (0x %02x %02x)\n",counterLastSecondA,
+				bRaw[16],bRaw[17]));	
+		sb.append(String.format("\tCounter B (last second): %d counts (0x %02x %02x)\n",counterLastSecondB,
+				bRaw[18],bRaw[19]));
 		
-		sb.append(String.format("\t  Counter counting time: %d seconds\n",counterSeconds));
+		sb.append(String.format("\t              Counter A: %d counts (0x %02x %02x %02x %02x)\n",counterA,
+				bRaw[20],bRaw[21],bRaw[22],bRaw[23]));	
+		sb.append(String.format("\t              Counter B: %d counts (0x %02x %02x %02x %02x)\n",counterB,
+				bRaw[24],bRaw[25],bRaw[26],bRaw[27]));	;
+		
+		sb.append(String.format("\t  Counter counting time: %d seconds (0x %02x %02x %02x %02x)\n",counterSeconds,
+				bRaw[28],bRaw[29],bRaw[30],bRaw[31]));	
 		
 		return sb.toString();
 	}
