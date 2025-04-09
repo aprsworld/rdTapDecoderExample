@@ -51,7 +51,11 @@ public class RecordDCSWCModuleLatchingContactor2x {
 	}	
 	
 	public String toString() {
-		return String.format("# DCSWC Module Latching Contactor 2x:\n\tInput Voltage: %.1f\n\tContactor A: 0x%02x\n\tContactor B: 0x%02x\n\tTemperature: %.1f deg C\n",
+		return String.format("# DCSWC Module Latching Contactor 2x:\n"
+				+ "                  Input Voltage: %.1f volts\n"
+				+ "                    Contactor A: 0x%02x\n"
+				+ "                    Contactor B: 0x%02x\n"
+				+ "                    Temperature: %.1f deg C\n",
 				voltageInputAverage,
 				stateContactorA,
 				stateContactorB,

@@ -31,7 +31,7 @@ public class rdTapDecoder {
 		rdTapSequenceNumber = (sbdByte[0]<< 8) + sbdByte[1];
 		
 		if ( 0 == mode ) {
-			System.out.printf("# rdTap sequence number: %d\n",rdTapSequenceNumber);
+			System.out.printf("# rdTap sequence number: %d (2 bytes)\n",rdTapSequenceNumber);
 		} else if ( 1 == mode ) {
 			System.out.printf("%d, ",rdTapSequenceNumber);
 		}
@@ -44,7 +44,7 @@ public class rdTapDecoder {
 			int rdTapDeviceDataLength=sbdByte[startByte+1];
 
 			if ( 0 == mode ) {
-				System.out.printf("# rdTap device number: %d (%d bytes)\n",rdTapDeviceNumber,rdTapDeviceDataLength);
+				System.out.printf("#   rdTap device number: %d (%d bytes)\n",rdTapDeviceNumber,rdTapDeviceDataLength);
 			} else if ( 1 == mode ) {
 				System.out.printf("%d, ",rdTapDeviceNumber);
 			}
